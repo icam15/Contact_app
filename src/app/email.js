@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 
 });
 
-const loginEmailNotification = (sendTo) => {
+export const loginEmailNotification = (sendTo) => {
     transporter.sendMail({
         from: "bianskiza@gmail.com",
         to: sendTo,
@@ -26,7 +26,23 @@ const loginEmailNotification = (sendTo) => {
     });
 }
 
-loginEmailNotification("icam.ali.0990@gmail.com")
+export const logoutEmailNotification = (sendTo) => {
+    transporter.sendMail({
+        from: "bianskiza@gmail.com",
+        to: sendTo,
+        subject: "Login Notification!",
+        text: "you have been logout at " + new Date().toDateString(),
+        
+    }, (error, info)=> {
+        if(error) {
+            return console.log(error)
+        } else {
+            logger.info(`message: ${info.response}`)
+        }
+    });
+}
+
+
 
 
 

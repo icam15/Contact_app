@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,54 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model contact {
+  id              Int               @id @default(autoincrement())
+  first_name      String            @db.VarChar(10)
+  last_name       String?           @db.VarChar(10)
+  phone           Int
+  create_at       DateTime          @default(now()) @db.Timestamp(0)
+  user_id         Int               @unique
+  user            user              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id")
+  contact_address contact_address?
+
+  @@index([user_id], map: "fk_user_id")
+}
+
+model contact_address {
+  id         Int      @id @default(autoincrement())
+  street     String   @db.VarChar(100)
+  city       String   @db.VarChar(30)
+  country    String?  @db.VarChar(30)
+  create_at  DateTime @default(now()) @db.Timestamp(0)
+  contact_id Int      @unique
+  contact    contact  @relation(fields: [contact_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_contact_id")
+
+  @@index([contact_id], map: "fk_contact_id")
+}
+
+model user {
+  id              Int            @id @default(autoincrement())
+  username        String         @db.VarChar(20)
+  password        String         @db.VarChar(10)
+  email           String         @db.VarChar(200)
+  phone           Int            @default(0)
+  refresh_token   String?        @db.VarChar(255)
+  profile_picture String?        @db.VarChar(300)
+  create_at       DateTime       @default(now()) @db.Timestamp(0)
+  contact         contact[]
+  user_address    user_address?
+}
+
+model user_address {
+  id        Int      @id @default(autoincrement())
+  street    String   @db.VarChar(100)
+  city      String   @db.VarChar(30)
+  country   String?  @db.VarChar(30)
+  create_at DateTime @default(now()) @db.Timestamp(0)
+  user_id   Int      @unique
+  user      user     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_to_user_address_id")
+
+  @@index([user_id], map: "fk_to_user_address_id")
 }
