@@ -2,23 +2,23 @@
 ### Create Table user
 CREATE Table user (
     id INT NOT NULL AUTO_INCREMENT ,
-    username VARCHAR(100) NOT NULL,
-    password VARCHAR(100) NOT NULL,
+    username VARCHAR(20) NOT NULL,
+    password VARCHAR(10) NOT NULL,
     email VARCHAR(200) NOT NULL,
-    phone VARCHAR(20) NOT NULL,
+    phone INT ,
     refresh_token VARCHAR(255),
     profile_picture VARCHAR(300),
     create_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    UNIQUE KEY username_unique (username)
 )engine = innodb;
 
-    
 
 CREATE TABLE contact (
     id INT AUTO_INCREMENT NOT NULL,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100),
-    phone INT NOT NULL,
+    first_name VARCHAR(10) NOT NULL,
+    last_name VARCHAR(10),
+    phone INT ,
     create_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_id INT NOT NULL,
     PRIMARY KEY (id)

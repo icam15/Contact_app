@@ -1,32 +1,37 @@
 import express from "express";
-import { logger } from "../app/logging.js";
 import authService from "./auth-service.js";
 
 const authRouter = express.Router();
 
-authRouter.post("/register", async (req, res) => {
+authRouter.post("/register", async (req, res, next) => {
     try {
-        // const newUserData = req.body
         const result = await authService.userRegister(req.body);
         res.status(200).json({
             data: result
         })
     } catch (error) {
-        logger.error(error);
-        console.log(error);
+        next(error.message);
     }
 
 });
 
-authRouter.post("/login", async (req, res) => {
+authRouter.post("/login", async (req, res, next) => {
     try {
+        const result = await authService.userLogin(req.body);
 
+        res.cookie("refreshToken", result.refreshToken, {
+            httpOnly: true,
+            maxAge: 60 * 60 * 24
+        })
+        res.status(200).json({
+            data: result.data,
+            accessToken : result.accessToken
+        })
     }catch (error) {
-        logger.error(error)
-        console.log(error)
+        next(error.message)
     }
 })
 
 export {
     authRouter
-}
+} 

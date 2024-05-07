@@ -1,35 +1,49 @@
 import { ResponseError } from "../app/error.js";
 import bcrypt from "bcrypt";
-import { checkUserExist, createNewUser } from "./auth-repository.js";
+import { addRefreshTokenUser, checkUserExist, createNewUser } from "./auth-repository.js";
+import { generateAccesToken, generateRefreshToken } from "../app/jwt.js";
 
 const userRegister = async (userData) => {
-    const user = await checkUserExist(userData.email);
+    const user = await checkUserExist(userData.email)
 
     if(user) {
-        throw new ResponseError(400, "your email is exist in our data");
+        throw new ResponseError(400, "your email is exist in our data")
     }
 
-    await bcrypt.hash(userData.password, 10);
+    userData.password = await bcrypt.hash(userData.password, 10);
 
-    const createUser = createNewUser(userData);
+    const createUser = createNewUser(userData)
 
     return createUser
 }
 
 const userLogin = async (userData) => {
-    const user = checkUserExist();
+    const user = await checkUserExist(userData.email);
 
     if(!user) {
-        throw new ResponseError(400, "username or password is wrong")
+        throw new ResponseError(400, "email or password is wrong")
     }
 
-    const isPassowrdValid = await bcrypt.compare(userData.password, user.password)
+    const isPassowrdValid = bcrypt.compare(userData.password, user.password)
 
     if(!isPassowrdValid) {
-        throw new ResponseError(400, "username or password is wrong");
+        throw new ResponseError(400, "email or password is wrong");
     }
 
-    console.log("good for this step")
+    const jwtPayload = {
+        id: user.id,
+        id: user.email
+    }
+
+    const JwtAccessToken = await generateAccesToken(jwtPayload);
+    const jwtRefreshToken = await generateRefreshToken(jwtPayload);
+
+    const addTokenUser = addRefreshTokenUser(user.id, jwtRefreshToken);
+
+    return {
+        accessToken : JwtAccessToken,
+        refreshToken : jwtRefreshToken
+    }
 }
 
 export default {

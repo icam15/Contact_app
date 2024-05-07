@@ -1,15 +1,18 @@
 import { prisma } from "../app/db.js"
 
 const checkUserExist = async (email) => {
-    await prisma.user.findFirst({
+    const check = await prisma.user.findFirst({
         where:{
             email,
         },
-        select:{
-            password:true,
-            id: true
+        select: {
+            id: true,
+            email: true,
+            password: true
         }
     })
+
+    return check
 }
 
 const createNewUser = async (newUserData) => {
@@ -17,14 +20,26 @@ const createNewUser = async (newUserData) => {
         data:{
             email: newUserData.email,
             password: newUserData.password,
-            username: newUserData.username,
-            phone: parseInt(newUserData.phone)
+            username: newUserData.username
         }
     })
+
     return create
+}
+
+const addRefreshTokenUser = async (id, refreshToken) => {
+    const addToken = await prisma.user.update({
+        where:{
+            id
+        },
+        data:{
+            refresh_token: refreshToken
+        }
+    })
 }
 
 export {
     checkUserExist,
-    createNewUser
+    createNewUser,
+    addRefreshTokenUser
 }
