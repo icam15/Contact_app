@@ -1,16 +1,17 @@
 import nodemailer from "nodemailer";
 import { logger } from "./logging.js";
 
+
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
         user: "bianskiza@gmail.com",
-        pass:" ssvs lpku jfkd kzgl"
+        pass: process.env.PASS_EMAIL
     }
 
 });
 
-export const loginEmailNotification = (sendTo) => {
+const loginEmailNotification = (sendTo) => {
     transporter.sendMail({
         from: "bianskiza@gmail.com",
         to: sendTo,
@@ -26,11 +27,11 @@ export const loginEmailNotification = (sendTo) => {
     });
 }
 
-export const logoutEmailNotification = (sendTo) => {
+const logoutEmailNotification = (sendTo) => {
     transporter.sendMail({
         from: "bianskiza@gmail.com",
         to: sendTo,
-        subject: "Login Notification!",
+        subject: "Logout Notification!",
         text: "you have been logout at " + new Date().toDateString(),
         
     }, (error, info)=> {
@@ -42,6 +43,10 @@ export const logoutEmailNotification = (sendTo) => {
     });
 }
 
+export {
+    loginEmailNotification,
+    logoutEmailNotification
+}
 
 
 

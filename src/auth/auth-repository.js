@@ -1,4 +1,5 @@
-import { prisma } from "../app/db.js"
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 const checkUserExist = async (email) => {
     const check = await prisma.user.findFirst({
@@ -35,11 +36,25 @@ const addRefreshTokenUser = async (id, refreshToken) => {
         data:{
             refresh_token: refreshToken
         }
+    });
+
+    return addToken
+}
+
+const createUserGoogle = async (userGoogleData) =>{
+    const create = await prisma.user.create({
+        data: {
+            email: userGoogleData.email,
+            username: userGoogleData.name
+        }
     })
+    
+    return create
 }
 
 export {
     checkUserExist,
     createNewUser,
-    addRefreshTokenUser
+    addRefreshTokenUser,
+    createUserGoogle
 }

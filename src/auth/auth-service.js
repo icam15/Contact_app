@@ -1,7 +1,10 @@
-import { ResponseError } from "../app/error.js";
+import { ResponseError } from "../lib/error.js";
 import bcrypt from "bcrypt";
-import { addRefreshTokenUser, checkUserExist, createNewUser } from "./auth-repository.js";
-import { generateAccesToken, generateRefreshToken } from "../app/jwt.js";
+import { addRefreshTokenUser, checkUserExist, createNewUser, createUserGoogle } from "./auth-repository.js";
+import { generateAccesToken, generateRefreshToken } from "../lib/jwt.js";
+import { oauthClient } from "../lib/google.oauth.js";
+import { google } from "googleapis";
+import { loginEmailNotification } from "../lib/email.js";
 
 const userRegister = async (userData) => {
     const user = await checkUserExist(userData.email)
@@ -24,21 +27,60 @@ const userLogin = async (userData) => {
         throw new ResponseError(400, "email or password is wrong")
     }
 
-    const isPassowrdValid = bcrypt.compare(userData.password, user.password)
+    const isPasswordValid = bcrypt.compare(userData.password, user.password)
 
-    if(!isPassowrdValid) {
+    if(!isPasswordValid) {
         throw new ResponseError(400, "email or password is wrong");
     }
 
     const jwtPayload = {
         id: user.id,
-        id: user.email
+        username: user.username
     }
 
     const JwtAccessToken = await generateAccesToken(jwtPayload);
     const jwtRefreshToken = await generateRefreshToken(jwtPayload);
 
     const addTokenUser = addRefreshTokenUser(user.id, jwtRefreshToken);
+
+    loginEmailNotification(user.email)
+
+    return {
+        accessToken : JwtAccessToken,
+        refreshToken : jwtRefreshToken
+    }
+}
+
+const userLoginGoogle = async (code) => {
+    const {tokens} = await oauthClient.getToken(code);
+    oauthClient.setCredentials(tokens)
+
+    const oauth2 = google.oauth2({
+        auth: oauthClient,
+        version: "v2"
+    });
+
+    const {data} = await oauth2.userinfo.get();
+
+    if(!data) {
+        throw new ResponseError(400, "User Google not found")
+    }
+
+    let addUserGoogle = await checkUserExist(data.email);
+
+    const jwtPayload = {
+        id:data.id,
+        name: data.name
+    }
+
+    const JwtAccessToken = await generateAccesToken(jwtPayload);
+    const jwtRefreshToken = await generateRefreshToken(jwtPayload);
+
+    if(!addUserGoogle) {
+        createUserGoogle(data)
+    }
+
+    loginEmailNotification(data.email)
 
     return {
         accessToken : JwtAccessToken,
@@ -48,5 +90,6 @@ const userLogin = async (userData) => {
 
 export default {
     userRegister,
-    userLogin
+    userLogin,
+    userLoginGoogle
 }
