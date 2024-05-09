@@ -16,4 +16,17 @@ userRouter.get("/", async (req, res) => {
   }
 });
 
+userRouter.post("/:id/phone", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const userPhone = parseInt(req.body.phone);
+    const result = await userService.addUserPhoneById(id, userPhone);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export { userRouter };
