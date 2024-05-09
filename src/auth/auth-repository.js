@@ -1,60 +1,54 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { prisma } from "../db/database.js";
 
 const checkUserExist = async (email) => {
-    const check = await prisma.user.findFirst({
-        where:{
-            email,
-        },
-        select: {
-            id: true,
-            email: true,
-            password: true
-        }
-    })
+  const check = await prisma.user.findFirst({
+    where: {
+      email,
+    },
+    select: {
+      id: true,
+      email: true,
+      password: true,
+    },
+  });
 
-    return check
-}
+  return check;
+};
 
 const createNewUser = async (newUserData) => {
-    const create = await prisma.user.create({
-        data:{
-            email: newUserData.email,
-            password: newUserData.password,
-            username: newUserData.username
-        }
-    })
+  const create = await prisma.user.create({
+    data: {
+      email: newUserData.email,
+      password: newUserData.password,
+      username: newUserData.username,
+    },
+  });
 
-    return create
-}
+  return create;
+};
 
 const addRefreshTokenUser = async (id, refreshToken) => {
-    const addToken = await prisma.user.update({
-        where:{
-            id
-        },
-        data:{
-            refresh_token: refreshToken
-        }
-    });
+  const addToken = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      refresh_token: refreshToken,
+    },
+  });
 
-    return addToken
-}
+  return addToken;
+};
 
-const createUserGoogle = async (userGoogleData) =>{
-    const create = await prisma.user.create({
-        data: {
-            email: userGoogleData.email,
-            username: userGoogleData.name
-        }
-    })
-    
-    return create
-}
+const createUserGoogle = async (userGoogleData) => {
+  const create = await prisma.user.create({
+    data: {
+      email: userGoogleData.email,
+      username: userGoogleData.name,
+    },
+  });
 
-export {
-    checkUserExist,
-    createNewUser,
-    addRefreshTokenUser,
-    createUserGoogle
-}
+  return create;
+};
+
+export { checkUserExist, createNewUser, addRefreshTokenUser, createUserGoogle };
