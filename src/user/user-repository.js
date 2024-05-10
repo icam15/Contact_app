@@ -13,13 +13,13 @@ const findUserById = async (id) => {
   return user;
 };
 
-const addUserPhone = async (id, userPhone) => {
+const userPhone = async (id, phone) => {
   const user = await prisma.user.update({
     where: {
       id,
     },
     data: {
-      phone: userPhone,
+      phone,
     },
     select: {
       username: true,
@@ -29,4 +29,20 @@ const addUserPhone = async (id, userPhone) => {
   return user;
 };
 
-export { findUserById, addUserPhone };
+const userImage = async (id, image) => {
+  const user = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      profile_picture: image,
+    },
+    select: {
+      username: true,
+      profile_picture: true,
+    },
+  });
+  return user;
+};
+
+export { findUserById, userImage, userPhone };

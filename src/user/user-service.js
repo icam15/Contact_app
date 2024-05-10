@@ -1,5 +1,5 @@
 import { ResponseError } from "../lib/error.js";
-import { addUserPhone, findUserById } from "./user-repository.js";
+import { userImage, findUserById, userPhone } from "./user-repository.js";
 
 const getUserById = async (id) => {
   const user = await findUserById(id);
@@ -11,14 +11,22 @@ const getUserById = async (id) => {
   return user;
 };
 
-const addUserPhoneById = async (id, userPhone) => {
+const addUserPhoneById = async (id, phone) => {
   await getUserById(id);
 
-  const user = await addUserPhone(id, userPhone);
+  const user = await userPhone(id, phone);
+  return user;
+};
+
+const addUserImageById = async (id, image) => {
+  await getUserById(id);
+
+  const user = await userImage(id, image);
   return user;
 };
 
 export default {
   getUserById,
   addUserPhoneById,
+  addUserImageById,
 };
