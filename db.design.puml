@@ -1,8 +1,6 @@
 @startuml
 entity user {
     * id: int <<pk>>
-    user_address_id: int <<fk>>
-    --
     *username: varchar(100)
     *password: varchar(100)
     *email: varchar(200)
@@ -16,7 +14,6 @@ entity user {
 entity contact {
     *id: int <<pk>>
     *user_id: int <<fk>>
-    contact_address_id: int <<fk>>
     --
     *first_name: varchar(100)
     last_name: varchar(100)
