@@ -16,7 +16,7 @@ userRouter.get("/", async (req, res) => {
   }
 });
 
-userRouter.post("/:id/phone", async (req, res) => {
+userRouter.post("/phone", async (req, res) => {
   try {
     const id = req.user.id;
     const userPhone = parseInt(req.body.phone);
@@ -35,7 +35,32 @@ userRouter.post("/image", async (req, res) => {
     const userImage = req.body.image;
     const result = await userService.addUserImageById(id, userImage);
     res.status(200).json({
+      data: result.username,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+userRouter.patch("/edit", async (req, res) => {
+  try {
+    const id = req.user.id;
+    const userData = req.body;
+    const result = await userService.editUserById(id, userData);
+    res.status(200).json({
       data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+userRouter.patch("/logout", async (req, res) => {
+  try {
+    const id = req.user.id;
+    const result = await userService.userLogout(id);
+    res.status(200).json({
+      data: "OK",
     });
   } catch (error) {
     console.log(error);
