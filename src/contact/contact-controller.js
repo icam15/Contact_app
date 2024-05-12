@@ -32,4 +32,29 @@ contactRouter.get("/:id", async (req, res) => {
   }
 });
 
+contactRouter.get("/", async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const result = await contactService.getContacts(userId);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+contactRouter.delete("/:id", async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const contacId = parseInt(req.params.id);
+    const result = await contactService.deleteContact(userId, contacId);
+    res.status(200).json({
+      data: "Contac deleted",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export { contactRouter };
