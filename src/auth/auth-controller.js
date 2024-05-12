@@ -65,3 +65,4 @@ authRouter.get("/token", async (req, res) => {
 });
 
 export { authRouter };
+
