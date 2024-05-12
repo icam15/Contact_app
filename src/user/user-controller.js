@@ -55,6 +55,19 @@ userRouter.patch("/edit", async (req, res) => {
   }
 });
 
+userRouter.post("/address", async (req, res) => {
+  try {
+    const id = req.user.id;
+    const dataAddress = req.body;
+    const result = await userService.addUserAddress(id, dataAddress);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 userRouter.patch("/logout", async (req, res) => {
   try {
     const id = req.user.id;
