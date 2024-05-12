@@ -1,4 +1,6 @@
 import {
+  contactAddress,
+  contactAddressEdit,
   contactEdit,
   createContact,
   dltContact,
@@ -41,10 +43,26 @@ const editContact = async (userId, contactId, newDataContact) => {
   return contact;
 };
 
+const addContactAddress = async (userId, contactId, dataAddress) => {
+  await findContactById(userId, contactId);
+
+  const contact = await contactAddress(contactId, dataAddress);
+  return contact;
+};
+
+const editContactAddress = async (userId, contactId, editDataAddress) => {
+  await userService.getUserById(userId);
+
+  const contact = await contactAddressEdit(contactId, editDataAddress);
+  return contact;
+};
+
 export default {
   addContact,
   findContactById,
   getContacts,
   deleteContact,
   editContact,
+  addContactAddress,
+  editContactAddress,
 };

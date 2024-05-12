@@ -55,4 +55,38 @@ const contactEdit = async (userId, contactId, newDataContact) => {
   return contact;
 };
 
-export { createContact, findContact, findContacts, dltContact, contactEdit };
+const contactAddress = async (contactId, dataAddress) => {
+  const contact = await prisma.contact_address.create({
+    data: {
+      city: dataAddress.city,
+      country: dataAddress.country,
+      street: dataAddress.street,
+      contact_id: contactId,
+    },
+  });
+  return contact;
+};
+
+const contactAddressEdit = async (contacId, newDataAddress) => {
+  const contact = await prisma.contact_address.update({
+    where: {
+      contact_id: contacId,
+    },
+    data: {
+      city: newDataAddress.city,
+      country: newDataAddress.country,
+      street: newDataAddress.street,
+    },
+  });
+  return contact;
+};
+
+export {
+  createContact,
+  findContact,
+  findContacts,
+  dltContact,
+  contactEdit,
+  contactAddress,
+  contactAddressEdit,
+};

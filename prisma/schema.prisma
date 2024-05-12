@@ -15,7 +15,7 @@ model contact {
   create_at       DateTime          @default(now()) @db.Timestamp(0)
   user_id         Int
   user            user              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id")
-  contact_address contact_address[]
+  contact_address contact_address?
 
   @@index([user_id], map: "fk_user_id")
 }
@@ -26,7 +26,7 @@ model contact_address {
   city       String   @db.VarChar(30)
   country    String?  @db.VarChar(30)
   create_at  DateTime @default(now()) @db.Timestamp(0)
-  contact_id Int
+  contact_id Int      @unique
   contact    contact  @relation(fields: [contact_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_contact_id")
 
   @@index([contact_id], map: "fk_contact_id")
@@ -42,7 +42,7 @@ model user {
   profile_picture String?        @db.VarChar(300)
   create_at       DateTime       @default(now()) @db.Timestamp(0)
   contact         contact[]
-  user_address    user_address[]
+  user_address    user_address?
 }
 
 model user_address {
@@ -51,7 +51,7 @@ model user_address {
   city      String   @db.VarChar(30)
   country   String?  @db.VarChar(30)
   create_at DateTime @default(now()) @db.Timestamp(0)
-  user_id   Int
+  user_id   Int      @unique
   user      user     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_to_user_address_id")
 
   @@index([user_id], map: "fk_to_user_address_id")
