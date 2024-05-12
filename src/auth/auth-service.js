@@ -1,6 +1,5 @@
 import { ResponseError } from "../lib/error.js";
 import bcrypt from "bcrypt";
-
 import {
   addRefreshTokenUser,
   checkUserExist,
