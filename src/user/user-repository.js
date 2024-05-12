@@ -59,6 +59,18 @@ const editUser = async (id, userData) => {
   return user;
 };
 
+const userAddress = async (id, dataAddress) => {
+  const user = await prisma.user_address.create({
+    data: {
+      city: dataAddress.city,
+      street: dataAddress.street,
+      country: dataAddress.country,
+      user_id: id,
+    },
+  });
+  return user;
+};
+
 const logout = async (id) => {
   const user = await prisma.user.update({
     where: {
@@ -96,4 +108,5 @@ export {
   checkEmail,
   checkPhone,
   logout,
+  userAddress,
 };

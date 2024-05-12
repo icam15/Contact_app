@@ -7,6 +7,7 @@ import {
   checkEmail,
   checkPhone,
   logout,
+  userAddress,
 } from "./user-repository.js";
 
 const getUserById = async (id) => {
@@ -55,10 +56,18 @@ const userLogout = async (id) => {
   return user;
 };
 
+const addUserAddress = async (id, address) => {
+  await getUserById(id);
+
+  const user = userAddress(id, address);
+  return user;
+};
+
 export default {
   getUserById,
   addUserPhoneById,
   addUserImageById,
   editUserById,
   userLogout,
+  addUserAddress,
 };
