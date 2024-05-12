@@ -1,4 +1,5 @@
 import {
+  contactEdit,
   createContact,
   dltContact,
   findContact,
@@ -33,4 +34,17 @@ const deleteContact = async (userId, contactId) => {
   const contact = await dltContact(userId, contactId);
 };
 
-export default { addContact, findContactById, getContacts, deleteContact };
+const editContact = async (userId, contactId, newDataContact) => {
+  await userService.getUserById(userId);
+
+  const contact = await contactEdit(userId, contactId, newDataContact);
+  return contact;
+};
+
+export default {
+  addContact,
+  findContactById,
+  getContacts,
+  deleteContact,
+  editContact,
+};

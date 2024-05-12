@@ -57,4 +57,22 @@ contactRouter.delete("/:id", async (req, res) => {
   }
 });
 
+contactRouter.patch("/:id/edit", async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const contactId = parseInt(req.params.id);
+    const newDataContact = req.body;
+    const result = await contactService.editContact(
+      userId,
+      contactId,
+      newDataContact
+    );
+    res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export { contactRouter };

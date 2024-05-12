@@ -40,4 +40,19 @@ const dltContact = async (userId, contactId) => {
   });
 };
 
-export { createContact, findContact, findContacts, dltContact };
+const contactEdit = async (userId, contactId, newDataContact) => {
+  const contact = await prisma.contact.update({
+    where: {
+      id: contactId,
+      user_id: userId,
+    },
+    data: {
+      first_name: newDataContact.first_name,
+      last_name: newDataContact.last_name,
+      phone: newDataContact.phone,
+    },
+  });
+  return contact;
+};
+
+export { createContact, findContact, findContacts, dltContact, contactEdit };
