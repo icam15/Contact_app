@@ -6,11 +6,10 @@ const contactRouter = express.Router();
 
 contactRouter.use(authMiddleware);
 
-contactRouter.post("/", async (req, res) => {
+contactRouter.get("/", async (req, res) => {
   try {
-    const id = req.user.id;
-    const dataContact = req.body;
-    const result = await contactService.addContact(id, dataContact);
+    const userId = req.user.id;
+    const result = await contactService.getContacts(userId);
     res.status(200).json({
       data: result,
     });
@@ -19,10 +18,11 @@ contactRouter.post("/", async (req, res) => {
   }
 });
 
-contactRouter.get("/", async (req, res) => {
+contactRouter.post("/add", async (req, res) => {
   try {
-    const userId = req.user.id;
-    const result = await contactService.getContacts(userId);
+    const id = req.user.id;
+    const dataContact = req.body;
+    const result = await contactService.addContact(id, dataContact);
     res.status(200).json({
       data: result,
     });
