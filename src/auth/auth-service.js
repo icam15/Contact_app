@@ -47,7 +47,7 @@ const userLogin = async (userData) => {
   const JwtAccessToken = await generateAccesToken(jwtPayload);
   const jwtRefreshToken = await generateRefreshToken(jwtPayload);
 
-  const addTokenUser = addRefreshTokenUser(user.id, jwtRefreshToken);
+  const addTokenUser = await addRefreshTokenUser(user.id, jwtRefreshToken);
 
   loginEmailNotification(user.email);
 
