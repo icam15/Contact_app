@@ -6,7 +6,19 @@ const contactRouter = express.Router();
 
 contactRouter.use(authMiddleware);
 
-contactRouter.post("/", async (req, res) => {
+contactRouter.get("/", async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const result = await contactService.getContacts(userId);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+contactRouter.post("/add", async (req, res) => {
   try {
     const id = req.user.id;
     const dataContact = req.body;
@@ -24,18 +36,6 @@ contactRouter.get("/:id", async (req, res) => {
     const userId = req.user.id;
     const contactId = parseInt(req.params.id);
     const result = await contactService.findContactById(userId, contactId);
-    res.status(200).json({
-      data: result,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-contactRouter.get("/", async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const result = await contactService.getContacts(userId);
     res.status(200).json({
       data: result,
     });

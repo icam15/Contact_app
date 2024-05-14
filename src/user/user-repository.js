@@ -108,5 +108,5 @@ export {
   checkEmail,
   checkPhone,
   logout,
-  userAddress
+  userAddress,
 };
