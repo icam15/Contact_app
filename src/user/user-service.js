@@ -38,7 +38,7 @@ const editUserById = async (id, userData) => {
   await getUserById(id);
 
   const email = await checkEmail(userData.email);
-  const phone = await checkPhone(parseInt(userData.email));
+  const phone = await checkPhone(parseInt(userData.phone));
   if (email) {
     throw new ResponseError(400, "Email is already used");
   } else if (phone) {
