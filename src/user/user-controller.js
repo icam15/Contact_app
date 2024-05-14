@@ -5,18 +5,18 @@ import { authMiddleware } from "../middleware/auth-middleware.js";
 const userRouter = express.Router();
 
 userRouter.use(authMiddleware);
-userRouter.get("/", async (req, res) => {
+userRouter.get("/", async (req, res, next) => {
   try {
     const result = await userService.getUserById(req.user.id);
     res.status(200).json({
       data: result,
     });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
-userRouter.post("/phone", async (req, res) => {
+userRouter.post("/phone", async (req, res, next) => {
   try {
     const id = req.user.id;
     const userPhone = parseInt(req.body.phone);
@@ -25,7 +25,7 @@ userRouter.post("/phone", async (req, res) => {
       data: result,
     });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
