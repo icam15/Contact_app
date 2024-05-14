@@ -19,11 +19,10 @@ contactRouter.post("/", async (req, res) => {
   }
 });
 
-contactRouter.get("/:id", async (req, res) => {
+contactRouter.get("/", async (req, res) => {
   try {
     const userId = req.user.id;
-    const contactId = parseInt(req.params.id);
-    const result = await contactService.findContactById(userId, contactId);
+    const result = await contactService.getContacts(userId);
     res.status(200).json({
       data: result,
     });
@@ -32,10 +31,11 @@ contactRouter.get("/:id", async (req, res) => {
   }
 });
 
-contactRouter.get("/", async (req, res) => {
+contactRouter.get("/:id", async (req, res) => {
   try {
     const userId = req.user.id;
-    const result = await contactService.getContacts(userId);
+    const contactId = parseInt(req.params.id);
+    const result = await contactService.findContactById(userId, contactId);
     res.status(200).json({
       data: result,
     });
