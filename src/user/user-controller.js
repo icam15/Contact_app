@@ -35,7 +35,7 @@ userRouter.post("/image", async (req, res) => {
     const userImage = req.body.image;
     const result = await userService.addUserImageById(id, userImage);
     res.status(200).json({
-      data: result.username,
+      data: result,
     });
   } catch (error) {
     console.log(error);
