@@ -49,7 +49,7 @@ const contactEdit = async (userId, contactId, newDataContact) => {
     data: {
       first_name: newDataContact.first_name,
       last_name: newDataContact.last_name,
-      phone: newDataContact.phone,
+      phone: parseInt(newDataContact.phone),
     },
   });
   return contact;
