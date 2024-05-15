@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { authRouter } from "./auth/auth-controller.js";
 import { userRouter } from "./user/user-controller.js";
 import { contactRouter } from "./contact/contact-controller.js";
+import { errorHandler } from "./middleware/error.middleware.js";
 dotnev.config();
 
 const app = express();
@@ -15,6 +16,8 @@ app.use(cookieParser());
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/contact", contactRouter);
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`server run at port ${port}`);

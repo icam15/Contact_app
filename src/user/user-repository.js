@@ -100,6 +100,15 @@ const checkPhone = async (phone) => {
   return user;
 };
 
+const checkUsername = async (username) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      username,
+    },
+  });
+  return user;
+};
+
 export {
   findUserById,
   userImage,
@@ -109,4 +118,5 @@ export {
   checkPhone,
   logout,
   userAddress,
+  checkUsername,
 };
