@@ -15,4 +15,4 @@ A Contact APP With REST API Protokol
 
 ## Why I made this ?
 
-because i want to have an understanding on REST API
+because i want to  understand about REST API
