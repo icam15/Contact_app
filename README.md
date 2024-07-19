@@ -1,6 +1,6 @@
 # REST API WITH CONTACT APP
 
-A Simple Contact APP With REST API Protokol
+A Contact APP With REST API Protokol
 
 ### Features
 
